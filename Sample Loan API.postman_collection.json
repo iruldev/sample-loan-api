@@ -1,0 +1,298 @@
+{
+	"info": {
+		"_postman_id": "c694799a-3802-4e88-9812-062506029b57",
+		"name": "Sample Loan API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5267792"
+	},
+	"item": [
+		{
+			"name": "Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"amount\": 1000000,\n    \"period\": 6,\n    \"purpose\": \"investment\",\n    \"customer\": {\n        \"first_name\": \"khoirul\",\n        \"last_name\": \"setyo\",\n        \"ktp\": \"1234567891234567\",\n        \"birth_date\": \"05-09-1994\",\n        \"sex\": 1\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/loans",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"loans"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create Failed",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/loans",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 400,\n    \"status\": \"Bad Request\",\n    \"data\": \"Key: 'LoanCreateRequest.Amount' Error:Field validation for 'Amount' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Period' Error:Field validation for 'Period' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Purpose' Error:Field validation for 'Purpose' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Customer.FirstName' Error:Field validation for 'FirstName' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Customer.LastName' Error:Field validation for 'LastName' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Customer.Ktp' Error:Field validation for 'Ktp' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Customer.BirthDate' Error:Field validation for 'BirthDate' failed on the 'required' tag\\nKey: 'LoanCreateRequest.Customer.Sex' Error:Field validation for 'Sex' failed on the 'required' tag\"\n}"
+				},
+				{
+					"name": "Create Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"amount\": 1000000,\n    \"period\": 6,\n    \"purpose\": \"investment\",\n    \"customer\": {\n        \"first_name\": \"khoirul\",\n        \"last_name\": \"setyo\",\n        \"ktp\": \"1234560509947890\",\n        \"birth_date\": \"05-09-1994\",\n        \"sex\": 1\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/loans",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 2,\n        \"customer_id\": 2,\n        \"amount\": 1000000,\n        \"period\": 6,\n        \"purpose\": \"investment\",\n        \"customer\": {\n            \"id\": 2,\n            \"name\": \"khoirulsetyo\",\n            \"ktp\": \"1234560509947890\",\n            \"birth_date\": \"05-09-1994\",\n            \"sex\": 1\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/loans/:id",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"loans",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get By Id Failed",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/loans/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "404"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 404,\n    \"status\": \"Not found\",\n    \"data\": \"loan is not found\"\n}"
+				},
+				{
+					"name": "Get By Id Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/loans/:id",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"customer_id\": 1,\n        \"amount\": 1000000,\n        \"period\": 6,\n        \"purpose\": \"investment\",\n        \"customer\": {\n            \"id\": 1,\n            \"name\": \"khoirul setyo\",\n            \"ktp\": \"1234567891234567\",\n            \"birth_date\": \"05-09-1994\",\n            \"sex\": 1\n        }\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get By KTP(NIK)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/loans?ktp=1234567891234567",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"loans"
+					],
+					"query": [
+						{
+							"key": "ktp",
+							"value": "1234567891234567"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get By KTP(NIK) Failed",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/loans?ktp=404",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans"
+							],
+							"query": [
+								{
+									"key": "ktp",
+									"value": "404"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 404,\n    \"status\": \"Not found\",\n    \"data\": \"customer is not found\"\n}"
+				},
+				{
+					"name": "Get By KTP(NIK) Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/loans?ktp=1234567891234569",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"loans"
+							],
+							"query": [
+								{
+									"key": "ktp",
+									"value": "1234567891234569"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": null,
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"status\": \"OK\",\n    \"data\": {\n        \"id\": 1,\n        \"name\": \"khoirul setyo\",\n        \"ktp\": \"1234567891234567\",\n        \"birth_date\": \"05-09-1994\",\n        \"sex\": 1,\n        \"loans\": [\n            {\n                \"id\": 1,\n                \"customer_id\": 1,\n                \"amount\": 1000000,\n                \"period\": 6,\n                \"purpose\": \"investment\"\n            }\n        ]\n    }\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost:8080",
+			"type": "string"
+		}
+	]
+}
