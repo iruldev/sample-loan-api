@@ -14,4 +14,4 @@ FROM alpine
 WORKDIR /app
 COPY --from=builder /app/loan-service /app
 
-CMD ["./cart-service"]
+CMD ["./loan-service"]

@@ -26,7 +26,11 @@ import (
 )
 
 func setupTestDB() *sql.DB {
-	db, err := sql.Open("mysql", os.Getenv("DATABASE_URL_TEST"))
+	dataSourceName := os.Getenv("DATABASE_URL_TEST")
+	if dataSourceName == "" {
+		dataSourceName = "root:root@tcp(localhost:33062)/loan-api-test"
+	}
+	db, err := sql.Open("mysql", dataSourceName)
 	helper.PanicIfError(err)
 
 	db.SetMaxIdleConns(5)
@@ -37,8 +41,15 @@ func setupTestDB() *sql.DB {
 	return db
 }
 
-//var BaseURL = fmt.Sprintf("http://localhost:%s", os.Getenv("PORT"))
-var BaseURL = fmt.Sprintf("http://localhost:3000")
+func BaseURL() string {
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8081"
+	}
+
+	return fmt.Sprintf("http://localhost:%s", port)
+}
 
 func setupRouter() http.Handler {
 	db := setupTestDB()
@@ -78,7 +89,7 @@ func TestCreateLoanSuccess(t *testing.T) {
 		}
 	}`)
 
-	request := httptest.NewRequest(http.MethodPost, BaseURL + "/api/loans", requestBody)
+	request := httptest.NewRequest(http.MethodPost, BaseURL() + "/api/loans", requestBody)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()
@@ -105,7 +116,7 @@ func TestCreateLoanFailed(t *testing.T) {
 	router := setupRouter()
 
 	requestBody := strings.NewReader(`{}`)
-	request := httptest.NewRequest(http.MethodPost, BaseURL + "/api/loans", requestBody)
+	request := httptest.NewRequest(http.MethodPost, BaseURL() + "/api/loans", requestBody)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()
@@ -147,7 +158,7 @@ func TestGetLoanByIdSuccess(t *testing.T) {
 
 	router := setupRouter()
 
-	request := httptest.NewRequest(http.MethodGet, BaseURL + "/api/loans/"+strconv.Itoa(loan.Id), nil)
+	request := httptest.NewRequest(http.MethodGet, BaseURL() + "/api/loans/"+strconv.Itoa(loan.Id), nil)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()
@@ -171,7 +182,7 @@ func TestGetLoanByIdFailed(t *testing.T) {
 	truncateLoans()
 	router := setupRouter()
 
-	request := httptest.NewRequest(http.MethodGet, BaseURL + "/api/loans/404", nil)
+	request := httptest.NewRequest(http.MethodGet, BaseURL() + "/api/loans/404", nil)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()
@@ -221,7 +232,7 @@ func TestListLoansByCustomerKtpSuccess(t *testing.T) {
 
 	router := setupRouter()
 
-	request := httptest.NewRequest(http.MethodGet, BaseURL + "/api/loans?ktp=" + customer.Ktp, nil)
+	request := httptest.NewRequest(http.MethodGet, BaseURL() + "/api/loans?ktp=" + customer.Ktp, nil)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()
@@ -255,7 +266,7 @@ func TestListLoansByCustomerKtpFailed(t *testing.T) {
 	truncateLoans()
 	router := setupRouter()
 
-	request := httptest.NewRequest(http.MethodGet, BaseURL + "/api/loans?ktp=404", nil)
+	request := httptest.NewRequest(http.MethodGet, BaseURL() + "/api/loans?ktp=404", nil)
 	request.Header.Add("Content-Type", "application/json")
 
 	recorder := httptest.NewRecorder()

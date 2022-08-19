@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"github.com/iruldev/sample-loan-api/app"
 	"github.com/iruldev/sample-loan-api/controller"
 	"github.com/iruldev/sample-loan-api/helper"
 	"github.com/iruldev/sample-loan-api/repository"
 	"github.com/iruldev/sample-loan-api/service"
 	"net/http"
+	"os"
 
 	"github.com/go-playground/validator/v10"
 	_ "github.com/go-sql-driver/mysql"
@@ -25,8 +27,14 @@ func main() {
 
 	router := app.NewRouter(loanController)
 
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8081"
+	}
+
 	server := http.Server{
-		Addr:    "localhost:3000",
+		Addr:    fmt.Sprintf("0.0.0.0:%s", port),
 		Handler: router,
 	}
 

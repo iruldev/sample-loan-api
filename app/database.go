@@ -8,7 +8,11 @@ import (
 )
 
 func NewDB() *sql.DB {
-	db, err := sql.Open("mysql", os.Getenv("DATABASE_URL"))
+	dataSourceName := os.Getenv("DATABASE_URL")
+	if dataSourceName == "" {
+		dataSourceName = "root:root@tcp(localhost:33061)/loan-api"
+	}
+	db, err := sql.Open("mysql", dataSourceName)
 	helper.PanicIfError(err)
 
 	db.SetMaxIdleConns(5)
