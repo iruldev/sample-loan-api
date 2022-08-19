@@ -1,0 +1,36 @@
+version: '3.9'
+services:
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "loan-api"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./init.sql:/data/application/init.sql
+    ports:
+      - "3306"
+  dbtest:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password --init-file /data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "loan-api-test"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./init.sql:/data/application/init.sql
+    ports:
+      - "3306"
+  loan:
+    build: .
+    environment:
+      PORT: 8080
+      DATABASE_URL: root:root@tcp(db:3306)/loan-api
+      DATABASE_URL_TEST: root:root@tcp(dbtest:3306)/loan-api-test
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - dbtest
+    restart: always
