@@ -5,6 +5,7 @@ import (
 	"github.com/iruldev/sample-loan-api/app"
 	"github.com/iruldev/sample-loan-api/controller"
 	"github.com/iruldev/sample-loan-api/helper"
+	"github.com/iruldev/sample-loan-api/model/web"
 	"github.com/iruldev/sample-loan-api/repository"
 	"github.com/iruldev/sample-loan-api/service"
 	"net/http"
@@ -17,6 +18,9 @@ import (
 func main() {
 	db := app.NewDB()
 	validate := validator.New()
+
+	validate.RegisterValidation("Alphanum", web.Alphanum)
+	validate.RegisterValidation("IsFormatMatch", web.IsFormatMatch)
 
 	customerRepository := repository.NewCustomerRepository()
 	customerService := service.NewCustomerService(customerRepository, db, validate)
